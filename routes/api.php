@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ADMIN_ROLE\UserController;
 use App\Http\Controllers\ALUMNI_ROLE\LowonganController as ALUMNI_ROLELowonganController;
 use App\Http\Controllers\ALUMNI_ROLE\SurveyController;
 use App\Http\Controllers\Auth\AuthController;
@@ -35,6 +36,7 @@ Route::prefix('v1')->group(function(){
     });
 
     Route::prefix('bkk')->group(function(){
+        Route::get('alumni/count', [AlumniController::class, 'countAlumni']);
         Route::post('importCsv', [AlumniController::class, 'import']);
         Route::resource('alumni', AlumniController::class);
         Route::resource('perusahaan', PerusahaanController::class);
@@ -54,6 +56,7 @@ Route::prefix('v1')->group(function(){
     Route::prefix('alumni')->group(function(){
         Route::put('survey', [SurveyController::class, 'store']);
         Route::resource('lowongan', ALUMNI_ROLELowonganController::class);
+        Route::get('kategori/lowongan', [ALUMNI_ROLELowonganController::class, 'kategori']);
     });
 
     Route::prefix('grafik')->group(function(){
@@ -61,4 +64,13 @@ Route::prefix('v1')->group(function(){
         Route::get('PersentaseKesesuainJurusan', [GrafikController::class, 'PersentaseKesesuainJurusan']);
         Route::get('PersentasePendaftarTerbanyak', [GrafikController::class, 'PersentasePendaftarTerbanyak']);
     });
+
+    Route::prefix('admin')->middleware('auth:admin')->group(function(){
+        Route::get('/users', [UserController::class,'index']);
+        Route::get('/users/{id}', [UserController::class,'show']);
+        Route::post('/users', [UserController::class,'store']);
+        Route::put('/users/{id}', [UserController::class,'update']);
+        Route::delete('/users/{id}', [UserController::class,'destroy']);
+    });
+
 });

@@ -10,6 +10,27 @@ use Illuminate\Support\Facades\Storage;
 
 class AlumniController extends Controller
 {
+
+    public function countAlumni(){
+        $alumniCount = Alumni::all()->count();
+        $alumniCountRPL = Alumni::where('jurusan', 'RPL')->count();
+        $alumniCountKKBT = Alumni::where('jurusan', 'KKBT')->count();
+        $alumniCountDKV = Alumni::where('jurusan', 'DKV')->count();
+        $alumniCountAKL = Alumni::where('jurusan', 'AKL')->count();
+        $alumniCountMP = Alumni::where('jurusan', 'MP')->count();
+        $alumniCountBD = Alumni::where('jurusan', 'BD')->count();
+
+        return response()->json([
+            'ALL' => $alumniCount,
+            'RPL' => $alumniCountRPL,
+            'KKBT' => $alumniCountKKBT,
+            'DKV' => $alumniCountDKV,
+            'AKL' => $alumniCountAKL,
+            'MP' => $alumniCountMP,
+            'BD' => $alumniCountBD
+        ], 200);
+    }
+
     public function import(Request $request)
     {
         $validator = Validator::make($request->all(), [
